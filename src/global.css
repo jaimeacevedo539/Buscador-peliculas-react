@@ -1,0 +1,11 @@
+.movie{
+    text-align: center;
+    margin-top: 50px;
+    color: red;
+}
+
+.button{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}

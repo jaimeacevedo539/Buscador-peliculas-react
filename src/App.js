@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import './global.css'
 
-function App() {
+
+
+const Movie = () => {
+  const [query, setQuery] = useState('');
+  const [movie, setMovie] = useState(null);
+  const [error, setError] = useState('');
+
+  const api = '4a44b7cc';
+
+  const search = async () => {
+    if (!query) return;
+
+    try {
+      const response = await fetch (`http://www.omdbapi.com/?t=${query}&apikey=${api}`);
+      const data = await response.json();
+
+      if (data.Response === "True") {
+        setMovie(data);
+        setError('');
+      } else {
+        setError(data.Error)
+        setMovie(null)
+      }
+    } catch (err) {
+      setError('error');
+      setMovie(null);
+    }
+
+  };
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+    <div className="movie">
+      <h1>Busca la pelicula amigo Cami 📽🍿 </h1>
+
+
+      <div>
+        <input
+          type="text"
+          placeholder="Nombre de la pelicula"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
+      <div className="button">
+        <button onClick={search}>Buscar </button>
+      </div>
+      {error && <p>{error}</p>}
+      {movie && (
+        <div>
+          <h2>{movie.Title}</h2>
+          <p>{movie.Plot}</p>
+          {movie.Poster !== "N/A" && (
+            <img src={movie.Poster} alt={`Poster of ${movie.Title}`} />
+          )}
+        </div>
+      )}
+    </div>
+    
+    
+  )
+}
+export default Movie;
